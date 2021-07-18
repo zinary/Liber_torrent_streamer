@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart';
+import 'package:liber2/widgets/movie_detail_page.dart';
 
 import 'main.dart';
+import 'models/movie_data.dart';
 
 class TorrentModel {
   String name;
@@ -15,37 +17,38 @@ class TorrentModel {
   TorrentModel(
       {this.info_hash, this.leechers, this.name, this.seeders, this.size});
 }
- Future<List<TorrentModel>> getTorrentDetails(
-      String title, String year) async {
-    var torrentData =
-        await get('https://api.apibay.workers.dev/q.php?q=$title+' '+$year');
-    // print(torrentData.body);
-    var jsonTorrentData = jsonDecode(torrentData.body);
-    // print(jsonTorrentData);
 
-    List<TorrentModel> torrents = [];
+Future<List<TorrentModel>> getTorrentDetails(String title, String year) async {
+  var torrentData =
+      await get('https://api.apibay.workers.dev/q.php?q=$title+' '+$year');
+  // print(torrentData.body);
+  var jsonTorrentData = jsonDecode(torrentData.body);
+  // print(jsonTorrentData);
 
-    for (var t in jsonTorrentData) {
-      TorrentModel torrent = TorrentModel(
-        name: t["name"],
-        info_hash: t["info_hash"],
-        leechers: t["leechers"],
-        seeders: t["seeders"],
-        size: t["size"],
-      );
-      // print(torrent.name);
-      torrents.add(torrent);
-      // print(torrents.name);
-    }
-    return torrents;
+  List<TorrentModel> torrents = [];
+
+  for (var t in jsonTorrentData) {
+    TorrentModel torrent = TorrentModel(
+      name: t["name"],
+      info_hash: t["info_hash"],
+      leechers: t["leechers"],
+      seeders: t["seeders"],
+      size: t["size"],
+    );
+    // print(torrent.name);
+    torrents.add(torrent);
+    // print(torrents.name);
   }
+  return torrents;
+}
+
 class SearchPage extends StatefulWidget {
   @override
   _SearchPageState createState() => _SearchPageState();
 }
 
 class _SearchPageState extends State<SearchPage> {
-String movieName = 'joker';
+  String movieName = 'joker';
 
   @override
   Widget build(BuildContext context) {
@@ -82,16 +85,14 @@ String movieName = 'joker';
                   ),
                   border: OutlineInputBorder(),
                 ),
-                onSubmitted: (text){
+                onSubmitted: (text) {
                   setState(() {
                     movieName = text;
-                    
                   });
-                  
+
                   // print(text);
                   // getTorrentDetails(text,"");
                   // HorizontalList(text);
-
                 },
               ),
               HorizontalList(movieName),
@@ -102,11 +103,10 @@ String movieName = 'joker';
     );
   }
 }
-void onSearch(){
-  
-}
+
+void onSearch() {}
+
 class HorizontalList extends StatelessWidget {
-  
   final String movieName;
   HorizontalList(this.movieName);
 
@@ -116,8 +116,7 @@ class HorizontalList extends StatelessWidget {
     movieData = await get(
         'https://api.themoviedb.org/3/search/movie?api_key=68f5e159270aa45cb28754ce59701d21&language=en-US&query=$movieName&page=1&include_adult=false');
 
-   
-print(movieData.body);
+    print(movieData.body);
     var jsonMovieData = jsonDecode(movieData.body);
 
     List<MovieData> movies = [];
@@ -135,28 +134,26 @@ print(movieData.body);
       // vote_average: double.parse(m["vote_average"]));
       movies.add(movie);
     }
-     print(movies.length);
+    print(movies.length);
     return movies;
-   
   }
-var appBar = AppBar().preferredSize.height;
+
+  var appBar = AppBar().preferredSize.height;
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      
       future: _getMovieDetails(movieName),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           return Container(
-            height: queryData.size.height-112,
+            height: queryData.size.height - 112,
             child: GridView.builder(
               // shrinkWrap: true,
               scrollDirection: Axis.vertical,
               // physics: BouncingScrollPhysics(),
-              itemCount: snapshot.data.length-2,
+              itemCount: snapshot.data.length - 2,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-               
                 childAspectRatio: 2 / 3,
                 crossAxisSpacing: 5,
                 mainAxisSpacing: 5,
@@ -170,7 +167,6 @@ var appBar = AppBar().preferredSize.height;
                       child: Hero(
                         tag: snapshot.data[index].title,
                         child: Card(
-                          
                           color: Colors.transparent,
                           shadowColor: Colors.black,
                           elevation: 5,

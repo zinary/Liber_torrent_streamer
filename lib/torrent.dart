@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -27,11 +25,11 @@ Widget build(BuildContext context) {
   return Container(height: 8, width: 8);
 }
 
-class MyApp2 extends StatelessWidget {
+class TorrentStreamerScreen extends StatelessWidget {
   final String magnet;
   final String torrentName;
 
-  MyApp2({
+  TorrentStreamerScreen({
     this.magnet,
     this.torrentName,
   });
@@ -68,7 +66,10 @@ class MyApp2 extends StatelessWidget {
           appBar: AppBar(
             actions: <Widget>[
               PopupMenuButton<String>(
-                icon: Icon(Icons.more_vert,color: Colors.greenAccent[400],),
+                icon: Icon(
+                  Icons.more_vert,
+                  color: Colors.greenAccent[400],
+                ),
                 color: Colors.grey[800],
                 onSelected: choiceAction,
                 itemBuilder: (BuildContext context) {
@@ -139,7 +140,7 @@ class _TorrentStreamerViewState extends State<TorrentStreamerView> {
   Map<dynamic, dynamic> status;
 
   @override
-  void initState () {
+  void initState() {
     super.initState();
     torrentLink = Torrent.magnet_link;
     torrentName1 = Torrent.torrent_name;
@@ -148,10 +149,8 @@ class _TorrentStreamerViewState extends State<TorrentStreamerView> {
 
     _addTorrentListeners();
     _startDownload();
- 
+
     //  openPlayerAutomatic(isStreamReady);
-     
-    
   }
 
   @override
@@ -197,10 +196,7 @@ class _TorrentStreamerViewState extends State<TorrentStreamerView> {
       setState(() {
         TorrentStreamer.launchVideo();
         isStreamReady = true;
-        
-      }
-      
-       );
+      });
     });
 
     TorrentStreamer.addEventListener('stopped', (_) {
@@ -236,14 +232,9 @@ class _TorrentStreamerViewState extends State<TorrentStreamerView> {
     );
   }
 
-
-void  openPlayerAutomatic(Future isReady) async {
-    
+  void openPlayerAutomatic(Future isReady) async {
     await isReady ? TorrentStreamer.launchVideo() : null;
-
-  
-
-}
+  }
 
   Future<void> _startDownload() async {
     await TorrentStreamer.stop();
@@ -384,7 +375,10 @@ void  openPlayerAutomatic(Future isReady) async {
           ),
           MySpacer(),
           MySpacer(),
-          Text(statusText,style: TextStyle(color: Colors.white,fontSize: 15),),
+          Text(
+            statusText,
+            style: TextStyle(color: Colors.white, fontSize: 15),
+          ),
           MySpacer(),
           // LinearProgressIndicator(
           //     valueColor:
