@@ -180,7 +180,7 @@ class HorizontalList extends StatelessWidget {
 
   Future<List<MovieData>> _getMovieDetails(String type) async {
     var movieData = await get(
-        'https://api.themoviedb.org/3/movie/$type?api_key=68f5e159270aa45cb28754ce59701d21&language=en-US&page=1');
+        'https://api.themoviedb.org/3/movie/$type?api_key=API_KEY&language=en-US&page=1');
 
     print(type);
 
